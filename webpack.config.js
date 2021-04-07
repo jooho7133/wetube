@@ -7,7 +7,7 @@ const OUTPUT_DIR = path.join(__dirname, "static");
 
 const config = {
   mode: MODE,
-  entry: ENTRY_FILE,
+  entry: ["@babel/polyfill", ENTRY_FILE],
   output: {
     path: OUTPUT_DIR,
     filename: "[name].js",
@@ -19,6 +19,11 @@ const config = {
   ],
   module: {
     rules: [
+      {
+        test: /\.(js)$/,
+        use: [{ loader: "babel-loader" }],
+      },
+
       {
         test: /\.(scss)$/,
         use: [
