@@ -44,6 +44,7 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
     console.log(user);
     if (user) {
       user.githubId = id;
+      user.avatarUrl = avatarUrl;
       user.save();
       return cb(null, user);
     } else {
@@ -67,6 +68,10 @@ export const postGithubLogIn = (req, res) => {
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
+};
+
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "User Detail" });
 };
 
 export const editProfile = (req, res) =>
