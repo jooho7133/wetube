@@ -3,6 +3,8 @@ const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayButton");
 const volumnBtn = document.getElementById("jsVolumnBtn");
 const fullScrnBtn = document.getElementById("jsFullScreen");
+const currentTime = document.getElementById("currentTime");
+const totalTime = document.getElementById("totalTime");
 
 function handlePlayClick() {
   if (videoPlayer.paused) {
@@ -38,10 +40,47 @@ function goFullScreen() {
   fullScrnBtn.addEventListener("click", exitFullScreen);
 }
 
+const formatDate = (seconds) => {
+  const secondsNumber = parseInt(seconds, 10);
+  let hours = Math.floor(seconds / 3600);
+  let minutes = Math.floor((secondsNumber - hours * 3600) / 60);
+  let totalSeconds = secondsNumber - hours * 3600 - minutes * 60;
+
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  if (totalSeconds < 10) {
+    totalSeconds = `0${totalSeconds}`;
+  }
+  return `${hours}:${minutes}:${totalSeconds}`;
+};
+
+function setTotalTime() {
+  const totalTimeString = formatDate(videoPlayer.duration);
+  totalTime.innerText = totalTimeString;
+}
+
+function getCurrentTime() {
+  const currentTimeString = formatDate(videoPlayer.currentTime);
+  currentTime.innerHTML = currentTimeString;
+}
+
 function init() {
   playBtn.addEventListener("click", handlePlayClick);
   volumnBtn.addEventListener("click", handleVolumnClick);
   fullScrnBtn.addEventListener("click", goFullScreen);
+
+  videoPlayer.addEventListener("timeupdate", getCurrentTime);
+
+  console.log(videoPlayer.readyState);
+  if (videoPlayer.readyState === 0) {
+    videoPlayer.addEventListener("loadedmetadata", setTotalTime);
+  } else {
+    setTotalTime();
+  }
 }
 
 if (videoContainer) {
