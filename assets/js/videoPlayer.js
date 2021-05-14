@@ -64,11 +64,20 @@ function setTotalTime() {
 }
 
 function getCurrentTime() {
-  const currentTimeString = formatDate(videoPlayer.currentTime);
+  console.log(videoPlayer.currentTime);
+  const currentTimeString = formatDate(Math.floor(videoPlayer.currentTime));
   currentTime.innerHTML = currentTimeString;
 }
 
+function handleEnded() {
+  videoPlayer.currentTime = 0;
+  playBtn.innerHTML = '<i class="fas fa-play"></i>';
+}
+
 function init() {
+  // console.log(videoPlayer.duration);
+  // videoPlayer.currentTime = 593;
+
   playBtn.addEventListener("click", handlePlayClick);
   volumnBtn.addEventListener("click", handleVolumnClick);
   fullScrnBtn.addEventListener("click", goFullScreen);
@@ -81,6 +90,8 @@ function init() {
   } else {
     setTotalTime();
   }
+
+  videoPlayer.addEventListener("ended", handleEnded);
 }
 
 if (videoContainer) {
